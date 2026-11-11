@@ -7,6 +7,7 @@ FRAME_DURATION = 0.082
 MOVE_PER_FRAME = 5.0
 FLY_SPEED_PPS = MOVE_PER_FRAME / FRAME_DURATION
 FRAME_COUNT = 14
+DRAW_SCALE = 0.3
 
 
 class Bird:
@@ -17,14 +18,16 @@ class Bird:
             Bird.image = load_image('bird_animation.png')
         self.cell_width = self.image.w // 5
         self.cell_height = self.image.h // 3
+        self.draw_width = self.cell_width * DRAW_SCALE
+        self.draw_height = self.cell_height * DRAW_SCALE
         self.frame = 0
-        self.left = self.cell_width / 2
-        self.right = get_canvas_width() - self.cell_width / 2
+        self.left = self.draw_width / 2
+        self.right = get_canvas_width() - self.draw_width / 2
         if x is None:
             x = random.uniform(self.left, self.right)
         if y is None:
-            y = random.uniform(max(boy_y + 100, self.cell_height / 2),
-                               get_canvas_height() - self.cell_height / 2)
+            y = random.uniform(max(boy_y + 100, self.draw_height / 2),
+                               get_canvas_height() - self.draw_height / 2)
         if direction is None:
             direction = random.choice((-1, 1))
         self.initial_x = x
@@ -58,5 +61,5 @@ class Bird:
         flip = '' if self.direction == 1 else 'h'
         self.image.clip_composite_draw(
             clip_x, clip_y, self.cell_width, self.cell_height,
-            0, flip, self.x, self.y, self.cell_width, self.cell_height
+            0, flip, self.x, self.y, self.draw_width, self.draw_height
         )

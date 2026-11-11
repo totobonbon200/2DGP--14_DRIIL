@@ -25,6 +25,7 @@ class Bird:
 
     def update(self):
         self.elapsed_time += game_framework.frame_time
+        self.frame = int(self.elapsed_time / FRAME_DURATION) % FRAME_COUNT
         # 거리(픽셀) = 경과시간(초) * 속도(픽셀/초)
         self.distance = self.elapsed_time * FLY_SPEED_PPS
         # 위치 = 초기위치 + 방향을 적용한 거리

@@ -1,5 +1,6 @@
 import game_framework
-from pico2d import get_canvas_width, load_image
+import random
+from pico2d import get_canvas_height, get_canvas_width, load_image
 
 
 FRAME_DURATION = 0.082
@@ -11,18 +12,25 @@ FRAME_COUNT = 14
 class Bird:
     image = None
 
-    def __init__(self, x=400, y=190, direction=1):
+    def __init__(self, boy_y, x=None, y=None, direction=None):
         if Bird.image is None:
             Bird.image = load_image('bird_animation.png')
         self.cell_width = self.image.w // 5
         self.cell_height = self.image.h // 3
         self.frame = 0
+        self.left = self.cell_width / 2
+        self.right = get_canvas_width() - self.cell_width / 2
+        if x is None:
+            x = random.uniform(self.left, self.right)
+        if y is None:
+            y = random.uniform(max(boy_y + 100, self.cell_height / 2),
+                               get_canvas_height() - self.cell_height / 2)
+        if direction is None:
+            direction = random.choice((-1, 1))
         self.initial_x = x
         self.x, self.y = x, y
         self.direction = direction
         self.initial_direction = direction
-        self.left = self.cell_width / 2
-        self.right = get_canvas_width() - self.cell_width / 2
         self.elapsed_time = 0.0
         self.distance = 0.0
 

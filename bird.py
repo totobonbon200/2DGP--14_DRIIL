@@ -1,13 +1,22 @@
 import game_framework
+from pico2d import load_image
 
 
 FRAME_DURATION = 0.082
 MOVE_PER_FRAME = 5.0
 FLY_SPEED_PPS = MOVE_PER_FRAME / FRAME_DURATION
+FRAME_COUNT = 14
 
 
 class Bird:
+    image = None
+
     def __init__(self, x=400, y=190, direction=1):
+        if Bird.image is None:
+            Bird.image = load_image('bird_animation.png')
+        self.cell_width = self.image.w // 5
+        self.cell_height = self.image.h // 3
+        self.frame = 0
         self.initial_x = x
         self.x, self.y = x, y
         self.direction = direction
@@ -20,3 +29,9 @@ class Bird:
         self.distance = self.elapsed_time * FLY_SPEED_PPS
         # 위치 = 초기위치 + 방향을 적용한 거리
         self.x = self.initial_x + self.direction * self.distance
+
+    def draw(self):
+        clip_x = (self.frame % 5) * self.cell_width
+        clip_y = (2 - self.frame // 5) * self.cell_height
+        self.image.clip_draw(clip_x, clip_y, self.cell_width,
+                             self.cell_height, self.x, self.y)
